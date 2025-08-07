@@ -2,77 +2,95 @@
 { config, pkgs, ... }:
 
 {
-  # Informations utilisateur
-  home.username = "jeremie";
+  # ╭──────────────────────────────────────────────────────────────╮
+  # │                       IDENTITÉ UTILISATEUR                   │
+  # ╰──────────────────────────────────────────────────────────────╯
+  home.username      = "jeremie";
   home.homeDirectory = "/home/jeremie";
 
-  # Packages utilisateur
+  # ╭──────────────────────────────────────────────────────────────╮
+  # │                 PAQUETS SANS MODULE HOME-MANAGER             │
+  # ╰──────────────────────────────────────────────────────────────╯
   home.packages = with pkgs; [
     # Outils de développement
     tailscale
     openssh
     gh
     cowsay
-    
-    # Ajoutez d'autres packages utilisateur ici
-    # firefox
-    # vscode
-    # discord
+
+    # Utilitaires divers (sans module HM)
+    tree
   ];
 
-  # Configuration git (déplacée du système vers l'utilisateur)
+  # ╭──────────────────────────────────────────────────────────────╮
+  # │                  PROGRAMMES AVEC MODULES HM                  │
+  # ╰──────────────────────────────────────────────────────────────╯
+  ## Git
   programs.git = {
-    enable = true;
-    userName = "JeremieAlcaraz";
-    userEmail = "hello@jeremiealcaraz.com";
-    
-    # Configuration git supplémentaire
+    enable         = true;
+    userName       = "JeremieAlcaraz";
+    userEmail      = "hello@jeremiealcaraz.com";
     extraConfig = {
       init.defaultBranch = "main";
-      pull.rebase = false;
+      pull.rebase        = false;
     };
   };
 
-  # Configuration Neovim
+  ## zoxide (cd intelligent)
+  programs.zoxide.enable = true;
+
+  ## eza (remplaçant moderne de ls)
+  programs.eza.enable = true;
+
+  ## navi (cheatsheets interactives)
+  programs.navi.enable = true;
+
+  # ╭──────────────────────────────────────────────────────────────╮
+  # │                      ÉDITEUR & OUTILS                        │
+  # ╰──────────────────────────────────────────────────────────────╯
   programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-    viAlias = true;
-    vimAlias = true;
+    enable         = true;
+    defaultEditor  = true;
+    viAlias        = true;
+    vimAlias       = true;
   };
 
-  # Configuration du shell (exemple avec zsh)
+  # ╭──────────────────────────────────────────────────────────────╮
+  # │                  CONFIGURATION DU SHELL ZSH                  │
+  # ╰──────────────────────────────────────────────────────────────╯
   programs.zsh = {
-    enable = true;
-    enableCompletion = true;
+    enable               = true;
+    enableCompletion     = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
-    
+
     shellAliases = {
-      ll = "ls -l";
-      la = "ls -la";
-      rebuild = "sudo nixos-rebuild switch --flake ~/nix-config#nixos";
-      rebuild-test = "sudo nixos-rebuild switch --flake ~/nix-config#nixos";
-      rebuild-boot = "sudo nixos-rebuild switch --flake ~/nix-config#nixos";
+      ls  = "eza --group-directories-first --icons";
+      ll  = "eza -l --git";
+      la  = "eza -la --git";
+      rebuild       = "sudo nixos-rebuild switch --flake ~/nix-config#nixos";
+      rebuild-test  = "sudo nixos-rebuild test   --flake ~/nix-config#nixos";
+      rebuild-boot  = "sudo nixos-rebuild boot   --flake ~/nix-config#nixos";
     };
   };
 
-  # Variables d'environnement
+  # ╭──────────────────────────────────────────────────────────────╮
+  # │                 VARIABLES & FICHIERS PERSONNELS              │
+  # ╰──────────────────────────────────────────────────────────────╯
   home.sessionVariables = {
     EDITOR = "nvim";
   };
 
-  # Dotfiles et configuration personnalisée
   home.file = {
-    # Exemple : fichier de configuration personnalisé
+    # Exemple de dotfile :
     # ".config/example/config.yml".text = ''
     #   key: value
     # '';
   };
 
-  # Version de Home Manager
+  # ╭──────────────────────────────────────────────────────────────╮
+  # │                       MÉTA-CONFIG HM                         │
+  # ╰──────────────────────────────────────────────────────────────╯
   home.stateVersion = "24.11";
-
-  # Permettre à Home Manager de gérer lui-même
   programs.home-manager.enable = true;
 }
