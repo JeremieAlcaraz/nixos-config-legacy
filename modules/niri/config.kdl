@@ -1,10 +1,9 @@
-// ~/.config/niri/config.kdl  — version minimale
+// ~/.config/niri/config.kdl — minimal
 
 input {
-  keyboard.xkb.layout "fr"   // AZERTY ; "us" si tu préfères
+  keyboard.xkb.layout "fr"
 }
 
-# Un bloc générique pour n’importe quel écran détecté
 output "*" {
   mode "preferred"
   scale 1
@@ -12,11 +11,10 @@ output "*" {
   focus-at-startup
 }
 
-# Programmes lancés au démarrage
 spawn-at-startup "waybar"
 spawn-at-startup "alacritty"
 
 binds {
-  Mod+Return { spawn "alacritty" }  # terminal
-  Mod+Q      { quit }               # quitter Niri proprement
+  Mod+Return { spawn "alacritty" }
+  Mod+Q      { quit }
 }
