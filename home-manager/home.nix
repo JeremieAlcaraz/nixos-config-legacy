@@ -45,6 +45,13 @@
   ## navi (cheatsheets interactives)
   programs.navi.enable = true;
 
+  programs.starship = {
+  enable = true;                     # installe starship + complétions
+  enableZshIntegration = true;       # l’injecte dans ton zsh
+  # enableBashIntegration = true;    # (décommente si tu utilises bash)
+  # enableFishIntegration = true;    # (idem pour fish)
+};
+
   # ╭──────────────────────────────────────────────────────────────╮
   # │                      ÉDITEUR & OUTILS                        │
   # ╰──────────────────────────────────────────────────────────────╯
