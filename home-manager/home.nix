@@ -53,6 +53,26 @@
   # enableFishIntegration = true;    # (idem pour fish)
 };
 
+  # BAR WAYLAND : WAYBAR
+  programs.waybar = {
+    enable  = true;                     # active Waybar :contentReference[oaicite:0]{index=0}
+    systemd.enable = true;  
+    package = pkgs.waybar;              # (optionnel : version depuis nixpkgs)
+    settings = {
+      mainBar = {
+        layer    = "top";
+        position = "top";
+        modules-left  = [ "niri/workspaces" ];   # intégration directe avec Niri :contentReference[oaicite:1]{index=1}
+        modules-center = [ ];
+        modules-right = [ "clock" "cpu" "memory" ];
+      };
+    };
+    style = ''
+      * { font-family: "FiraCode Nerd Font"; font-size: 11pt; }
+      #clock { margin: 0 8px; }
+    '';
+  };
+
   # ╭──────────────────────────────────────────────────────────────╮
   # │                  CONFIGURATION DU SHELL ZSH                  │
   # ╰──────────────────────────────────────────────────────────────╯
@@ -82,7 +102,12 @@
   home.file = {
     # Cheatsheets Navi personnelles
     "${config.xdg.dataHome}/navi/cheats".source =
-      ../modules/navi/cheats;
+       inputs.self + "/modules/navi/cheats";
+
+      # config niri
+    "${config.xdg.configHome}/niri/config.kdl".source =
+       inputs.self + "/modules/niri/config.kdl";
+
 
     # Exemple de dotfile (commenté)
     # ".config/example/config.yml".text = ''
@@ -95,4 +120,9 @@
   # ╰──────────────────────────────────────────────────────────────╯
   home.stateVersion = "24.11";
   programs.home-manager.enable = true;
+
+
+
+
+
 }
