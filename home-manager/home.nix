@@ -82,7 +82,11 @@
   };
 
   home.file = {
-    # Exemple de dotfile :
+    # Cheatsheets Navi personnelles
+    "${config.xdg.dataHome}/navi/cheats".source =
+      ../modules/navi/cheats;
+
+    # Exemple de dotfile (commenté)
     # ".config/example/config.yml".text = ''
     #   key: value
     # '';
