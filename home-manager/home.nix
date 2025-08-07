@@ -1,5 +1,5 @@
 # Configuration utilisateur avec Home Manager
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:  # ← Ajoutez inputs ici
 
 {
   # ╭──────────────────────────────────────────────────────────────╮
@@ -13,6 +13,7 @@
   # ╰──────────────────────────────────────────────────────────────╯
   home.packages = with pkgs; [
     # Outils de développement
+    inputs.neovim.packages.${pkgs.system}.default  # ← Changez ici
     tailscale
     openssh
     gh
@@ -51,16 +52,6 @@
   # enableBashIntegration = true;    # (décommente si tu utilises bash)
   # enableFishIntegration = true;    # (idem pour fish)
 };
-
-  # ╭──────────────────────────────────────────────────────────────╮
-  # │                      ÉDITEUR & OUTILS                        │
-  # ╰──────────────────────────────────────────────────────────────╯
-  programs.neovim = {
-    enable         = true;
-    defaultEditor  = true;
-    viAlias        = true;
-    vimAlias       = true;
-  };
 
   # ╭──────────────────────────────────────────────────────────────╮
   # │                  CONFIGURATION DU SHELL ZSH                  │

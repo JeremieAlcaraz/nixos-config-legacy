@@ -8,6 +8,14 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # neovim
+      neovim = {
+        url = "github:dileep-kishore/nyanvim";
+        inputs.nixpkgs.follows = "nixpkgs";
+      };
+
+
   };
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
@@ -15,7 +23,6 @@
       nixosConfigurations = {
         nixos = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-
           modules = [
             ./host/nixos/configuration.nix
 
@@ -26,6 +33,8 @@
             {
               home-manager.useGlobalPkgs   = true;
               home-manager.useUserPackages = true;
+              # Ajoutez cette ligne pour passer inputs
+              home-manager.extraSpecialArgs = { inherit inputs; };
 
               home-manager.users.jeremie = import ./home-manager/home.nix;
 
