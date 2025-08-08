@@ -23,6 +23,7 @@
     (inputs.self + "/modules/waybar")
     (inputs.self + "/modules/alacritty")
     (inputs.self + "/modules/misc")
+    (inputs.self + "/modules/git") 
   ];
 
   # ╭──────────────────────────────────────────────────────────────╮
@@ -39,20 +40,6 @@
     ripgrep
     delta  # pager utilisé par lazygit
   ];
-
-  # ╭──────────────────────────────────────────────────────────────╮
-  # │                  PROGRAMMES AVEC MODULES HM                  │
-  # ╰──────────────────────────────────────────────────────────────╯
-  ## Git
-  programs.git = {
-    enable = true;
-    userName = "JeremieAlcaraz";
-    userEmail = "hello@jeremiealcaraz.com";
-    extraConfig = {
-      init.defaultBranch = "main";
-      pull.rebase = false;
-    };
-  };
 
   # ╭──────────────────────────────────────────────────────────────╮
   # │                 VARIABLES & FICHIERS PERSONNELS              │
