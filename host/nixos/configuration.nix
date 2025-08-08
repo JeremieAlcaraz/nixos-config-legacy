@@ -96,15 +96,19 @@
   ];
 
   # ╭────────────────────── WAYLAND / Niri ─────────────────╮
-  ## 1. Activer le compositeur
-  programs.niri.enable = true;             # Niri dans nixpkgs-unstable :contentReference[oaicite:1]{index=1}
+  programs.niri.enable = true;
 
-  ## 2. Audio & screencast (PipeWire + portail)
-  services.pipewire.enable = true;         # Framework audio/vidéo moderne :contentReference[oaicite:2]{index=2}
-  xdg.portal = {
-    enable        = true;
-    extraPortals  = [ pkgs.xdg-desktop-portal-gnome ];  # requis par Niri pour le screencast :contentReference[oaicite:3]{index=3}
-  };
+  # Portals adaptés à Niri (wlroots)
+  xdg.portal.enable = true;
+  xdg.portal.wlr.enable = true;
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+
+  # Outils utilisés dans ta config Niri
+  environment.systemPackages = with pkgs; [
+    git neovim
+    wl-clipboard swaybg xwayland-satellite
+    waybar alacritty fuzzel swaylock brightnessctl
+  ];
 
   ## 3. Seat management
   # Par défaut, NixOS utilise systemd-logind.  Si tu préfères seatd :

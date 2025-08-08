@@ -13,7 +13,7 @@
   home.homeDirectory = "/home/jeremie";
 
   # ╭──────────────────────────────────────────────────────────────╮
-  # │                          IMPORTS MODULES                     │
+  # │               IMPORTS MODULES HOME-MANAGER                   │
   # ╰──────────────────────────────────────────────────────────────╯
   imports =
     let
@@ -35,7 +35,6 @@
     inputs.neovim.packages.${pkgs.system}.default
     gh
     cowsay
-    # Utilitaires divers (sans module HM)
     tree
     fzf
     ripgrep
