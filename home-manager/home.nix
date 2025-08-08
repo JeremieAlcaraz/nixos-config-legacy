@@ -22,6 +22,7 @@
     (inputs.self + "/modules/niri")
     (inputs.self + "/modules/waybar")
     (inputs.self + "/modules/alacritty")
+    (inputs.self + "/modules/misc")
   ];
 
   # ╭──────────────────────────────────────────────────────────────╮
@@ -51,22 +52,6 @@
       init.defaultBranch = "main";
       pull.rebase = false;
     };
-  };
-
-  ## zoxide (cd intelligent)
-  programs.zoxide.enable = true;
-
-  ## eza (remplaçant moderne de ls)
-  programs.eza.enable = true;
-
-  ## navi (cheatsheets interactives)
-  programs.navi.enable = true;
-
-  programs.starship = {
-    enable = true; # installe starship + complétions
-    enableZshIntegration = true; # l’injecte dans ton zsh
-    # enableBashIntegration = true;
-    # enableFishIntegration = true;
   };
 
   # ╭──────────────────────────────────────────────────────────────╮
