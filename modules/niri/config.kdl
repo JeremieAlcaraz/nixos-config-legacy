@@ -2,7 +2,9 @@ prefer-no-csd
 
 input {
     keyboard {
-        xkb { layout "fr" }
+        xkb {
+            layout "fr"
+        }
         numlock
     }
     touchpad { tap natural-scroll }
