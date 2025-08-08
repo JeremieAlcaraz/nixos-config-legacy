@@ -30,7 +30,6 @@
     inputs.neovim.packages.${pkgs.system}.default
     gh
     cowsay
-
     # Utilitaires divers (sans module HM)
     tree
     fzf
@@ -107,11 +106,7 @@
     EDITOR = "nvim";
   };
 
-  home.file = {
-    # Cheatsheets Navi personnelles (on déplacera dans le module navi à l'étape 3)
-    "${config.xdg.dataHome}/navi/cheats".source =
-      inputs.self + "/modules/navi/cheats";
-  };
+  # home.file = {};
 
   # ╭──────────────────────────────────────────────────────────────╮
   # │                       MÉTA-CONFIG HM                         │

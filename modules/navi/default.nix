@@ -1,9 +1,15 @@
-# Module Navi (stub — étape 1)
+# Module Navi (Home Manager)
 {
   config,
   pkgs,
   ...
 }:
 {
-  # Rien ici pour l’instant — on déplacera les cheats et la config dans ce module à l’étape 3.
+  # ╭──────────────────────────────────────────────────────────────╮
+  # │                             NAVI                             │
+  # ╰──────────────────────────────────────────────────────────────╯
+  programs.navi.enable = true;
+
+  # Cheatsheets personnelles
+  xdg.dataFile."navi/cheats".source = ./cheats;
 }
