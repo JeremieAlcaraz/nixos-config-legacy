@@ -10,6 +10,29 @@
   boot.loader.systemd-boot.enable     = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+
+    # ╭────────────────────── LOGS & KERNEL ──────────────────╮
+  boot = {
+    kernelParams = [ "loglevel=4" "quiet" ];
+    consoleLogLevel = 4;
+    kernel.sysctl = {
+      "kernel.printk" = "4 4 1 7";  # Réduire verbosité console
+    };
+  };
+
+  services.journald = {
+    extraConfig = ''
+      MaxLevelStore=notice
+      MaxLevelKMsg=warning
+      Storage=persistent
+      Compress=yes
+      SystemMaxUse=500M
+      RuntimeMaxUse=100M
+      MaxRetentionSec=1week
+    '';
+  };
+
+
   # ╭──────────────────────── RÉSEAU ───────────────────────╮
   networking.hostName              = "nixos";
   networking.networkmanager.enable = true;
