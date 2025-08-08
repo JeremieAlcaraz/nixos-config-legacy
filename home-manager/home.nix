@@ -19,7 +19,8 @@
     (inputs.self + "/modules/aliases")
     (inputs.self + "/modules/lazygit")
     (inputs.self + "/modules/navi")
-    (inputs.self + "/modules/niri")  
+    (inputs.self + "/modules/niri")
+    (inputs.self + "/modules/waybar")
   ];
 
   # ╭──────────────────────────────────────────────────────────────╮
@@ -65,26 +66,6 @@
     enableZshIntegration = true; # l’injecte dans ton zsh
     # enableBashIntegration = true;
     # enableFishIntegration = true;
-  };
-
-  # BAR WAYLAND : WAYBAR
-  programs.waybar = {
-    enable = true; # active Waybar
-    systemd.enable = true;
-    package = pkgs.waybar;
-    settings = {
-      mainBar = {
-        layer = "top";
-        position = "top";
-        modules-left = ["niri/workspaces"];
-        modules-center = [];
-        modules-right = ["clock" "cpu" "memory"];
-      };
-    };
-    style = ''
-      * { font-family: "FiraCode Nerd Font"; font-size: 11pt; }
-      #clock { margin: 0 8px; }
-    '';
   };
 
   ## Alacritty (terminal Wayland)
