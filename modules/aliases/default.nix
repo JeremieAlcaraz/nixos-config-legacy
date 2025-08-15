@@ -21,6 +21,10 @@
       # Lazygit
       lg = "lazygit";
 
+
+      # Zsh
+      reload = "exec zsh";
+
       # Nix
       # Mets à jour SEULEMENT l'input neovim du flake AU BON CHEMIN,
       # puis rebuild NixOS pour l'host "nixos" (adapte si ton host s'appelle autrement)
@@ -36,6 +40,10 @@
       ll = "eza -l --git";
       la = "eza -la --git";
       # rebuild = "sudo nixos-rebuild switch --flake ~/nix-config#nixos";
+
+
+
+
     };
   };
 }
