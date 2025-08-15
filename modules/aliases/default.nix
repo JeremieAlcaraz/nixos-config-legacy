@@ -21,12 +21,11 @@
       # Lazygit
       lg = "lazygit";
 
-
       # Zsh
       reload = "exec zsh";
 
       # Nix
-      rebuild = "nix flake update neovim --flake /home/jeremie/nix-config && sudo nixos-rebuild switch --flake /home/jeremie/nix-config#nixos";
+      rebuild = "nix flake update neovim --flake /home/jeremie/nix-config && sudo nixos-rebuild switch --flake /home/jeremie/nix-config#nixos && exec zsh";
       rebuild-all = "nix flake update --flake $HOME/nix-config && sudo nixos-rebuild switch --flake $HOME/nix-config#nixos";
       rebuild-test = "sudo nixos-rebuild test --flake $HOME/nix-config#nixos";
       rebuild-boot = "sudo nixos-rebuild boot --flake $HOME/nix-config#nixos";
@@ -36,10 +35,6 @@
       ll = "eza -l --git";
       la = "eza -la --git";
       # rebuild = "sudo nixos-rebuild switch --flake ~/nix-config#nixos";
-
-
-
-
     };
   };
 }
