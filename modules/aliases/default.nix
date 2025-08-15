@@ -22,7 +22,7 @@
       lg = "lazygit";
 
       # Nix
-      rebuild = "sudo nixos-rebuild switch --flake .#nixos";
+      rebuild = "nix flake lock --update-input neovim && sudo nixos-rebuild switch --flake .#nixos";
 
       # Divers
       v = "nvim";
