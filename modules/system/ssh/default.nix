@@ -7,7 +7,7 @@
   services.openssh = {
     enable = true;
     settings = {
-      PasswordAuthentication = false; # mets à false après test
+      PasswordAuthentication = true; # mets à false après test
       PubkeyAuthentication = true;
       KbdInteractiveAuthentication = false;
       PermitRootLogin = "no";
