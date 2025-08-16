@@ -1,9 +1,13 @@
-{ lib, config, pkgs, ... }:
 {
+  lib,
+  config,
+  pkgs,
+  ...
+}: {
   services.openssh = {
     enable = true;
     settings = {
-      PasswordAuthentication = true;   # mets à false après test
+      PasswordAuthentication = false; # mets à false après test
       PubkeyAuthentication = true;
       KbdInteractiveAuthentication = false;
       PermitRootLogin = "no";
