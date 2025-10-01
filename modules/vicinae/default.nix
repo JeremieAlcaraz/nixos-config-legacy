@@ -13,6 +13,10 @@ in
     package = vicinaePkg;
   };
 
+  home.packages = lib.mkIf cfg.enable [
+    (cfg.package or vicinaePkg)
+  ];
+
   xdg.desktopEntries.vicinae = {
     name = "Vicinae";
     comment = "Client Vicinae";
