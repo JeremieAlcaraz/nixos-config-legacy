@@ -8,7 +8,7 @@ The workflow runs on GitHub-hosted Ubuntu runners. Each run performs these steps
 
 1. Check out the repository.
 2. Install Nix using `cachix/install-nix-action`, enabling the `nix-command` and `flakes` features.
-3. Invoke `nixos-generators` with the `nixos-qcow` flake output to produce a QCOW2 image.
+3. Invoke `nixos-generators` with the `nixos` flake output to produce a QCOW2 image.
 4. Publish the resulting `nixos.qcow2` file as a downloadable artifact.
 
 Because the build happens on a clean Linux runner, you do not need any local tooling on macOS.
@@ -23,10 +23,6 @@ Because the build happens on a clean Linux runner, you do not need any local too
 1. Navigate to **Actions** in GitHub.
 2. Open the latest **Build QCOW2 image** run.
 3. Download the `nixos-qcow2` artifact. It contains `out/nixos.qcow2`.
-
-## Image-specific module
-
-The `nixos-qcow` configuration includes `modules/system/image-qcow.nix`, which forces the root filesystem to `/dev/disk/by-label/nixos` (matching the generator defaults) and removes swap devices. This avoids conflicts with `hardware-configuration.nix` when building disk images.
 
 ## Using the image with Proxmox
 

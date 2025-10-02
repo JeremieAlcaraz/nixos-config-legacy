@@ -32,58 +32,52 @@
     , ...
     } @ inputs:
     let
-      system = "x86_64-linux";
-      mkFormatter = system':
+      mkFormatter = system:
         let
-          pkgs = nixpkgs.legacyPackages.${system'};
+          pkgs = nixpkgs.legacyPackages.${system};
         in
         pkgs.writeShellApplication {
           name = "fmt";
           runtimeInputs = [ pkgs.nixpkgs-fmt pkgs.findutils ];
           text = builtins.readFile ./scripts/fmt.sh;
         };
-      commonModules = [
-        ./host/nixos/configuration.nix
-
-        # Ajout de la compatibilité pour les binaires externes comme VS Code Server
-        ({ pkgs, ... }: {
-          programs.nix-ld = {
-            enable = true;
-            libraries = with pkgs; [
-              stdenv.cc.cc
-              zlib
-              curl
-              openssl
-            ];
-          };
-
-          # On garde le lingering, c'est une bonne pratique pour les services utilisateur
-          users.users.jeremie.linger = true;
-        })
-
-        # module Home-Manager
-        home-manager.nixosModules.home-manager
-
-        # glue pour charger la config user
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = { inherit inputs; };
-
-          home-manager.users.jeremie = import ./home-manager/home.nix;
-        }
-      ];
     in
     rec {
       nixosConfigurations = {
         nixos = nixpkgs.lib.nixosSystem {
-          inherit system;
-          modules = commonModules;
-        };
+          system = "x86_64-linux";
+          modules = [
+            ./host/nixos/configuration.nix
 
-        nixos-qcow = nixpkgs.lib.nixosSystem {
-          inherit system;
-          modules = commonModules ++ [ ./modules/system/image-qcow.nix ];
+            # Ajout de la compatibilité pour les binaires externes comme VS Code Server
+            ({ pkgs, ... }: {
+              programs.nix-ld = {
+                enable = true;
+                libraries = with pkgs; [
+                  stdenv.cc.cc
+                  zlib
+                  curl
+                  openssl
+                ];
+              };
+
+              # On garde le lingering, c'est une bonne pratique pour les services utilisateur
+              users.users.jeremie.linger = true;
+            })
+
+            # module Home-Manager
+            home-manager.nixosModules.home-manager
+
+            # glue pour charger la config user
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              # Ajoutez cette ligne pour passer inputs
+              home-manager.extraSpecialArgs = { inherit inputs; };
+
+              home-manager.users.jeremie = import ./home-manager/home.nix;
+            }
+          ];
         };
       };
 
