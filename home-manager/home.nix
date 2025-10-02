@@ -1,8 +1,9 @@
 # Configuration utilisateur avec Home Manager
-{ config
-, pkgs
-, inputs
-, ...
+{
+  config,
+  pkgs,
+  inputs,
+  ...
 }: {
   # ╭──────────────────────────────────────────────────────────────╮
   # │                       IDENTITÉ UTILISATEUR                   │
@@ -14,14 +15,13 @@
   # │               IMPORTS MODULES HOME-MANAGER                   │
   # ╰──────────────────────────────────────────────────────────────╯
   # 🔧 N'itère QUE dans modules/home (évite les modules système)
-  imports =
-    let
-      root = inputs.self + "/modules/home";
-      entries = builtins.readDir root;
-      names = builtins.attrNames entries;
-      dirs = builtins.filter (n: entries.${n} == "directory") names;
-      sorted = builtins.sort builtins.lessThan dirs;
-    in
+  imports = let
+    root = inputs.self + "/modules/home";
+    entries = builtins.readDir root;
+    names = builtins.attrNames entries;
+    dirs = builtins.filter (n: entries.${n} == "directory") names;
+    sorted = builtins.sort builtins.lessThan dirs;
+  in
     builtins.map (n: root + "/${n}") sorted;
 
   # ╭──────────────────────────────────────────────────────────────╮
@@ -31,6 +31,7 @@
     # Outils de développement
     inputs.neovim.packages.${pkgs.system}.default
     gh
+    cachix
     cowsay
     tree
     fzf
