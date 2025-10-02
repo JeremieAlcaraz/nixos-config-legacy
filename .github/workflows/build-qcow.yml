@@ -24,10 +24,11 @@ jobs:
       - name: Build QCOW2 image
         run: |
           mkdir -p out
-          nix run github:nix-community/nixos-generators -- \
+          nix --accept-flake-config run github:nix-community/nixos-generators -- \
             --format qcow \
-            --flake .#nixos \
-            -o ./out/nixos.qcow2
+            --flake .#nixos-qcow \
+            -o ./out/nixos.qcow2 \
+            --show-trace
 
       - name: Upload QCOW2 artifact
         uses: actions/upload-artifact@v4
