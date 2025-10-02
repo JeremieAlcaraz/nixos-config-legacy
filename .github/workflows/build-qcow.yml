@@ -1,4 +1,4 @@
-name: Build Proxmox QCOW2 image (with Cachix)
+name: Build Proxmox QCOW2 image (UEFI + systemd-boot)
 
 on:
   workflow_dispatch:
@@ -28,7 +28,7 @@ jobs:
       - name: Install Nix
         uses: cachix/install-nix-action@v27
         with:
-          nix_path: nixpkgs=channel:nixos-24.05
+          nix_path: nixpkgs=channel:nixos-unstable
           extra_nix_config: |
             experimental-features = nix-command flakes
 
@@ -38,17 +38,36 @@ jobs:
           name: jeremiealcaraz
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
-      - name: Build QCOW2 image
+      - name: Build QCOW2 image for Proxmox
         run: |
           mkdir -p out
           nix --accept-flake-config run github:nix-community/nixos-generators -- \
             --format qcow \
-            --flake .#nixos \
+            --flake .#proxmox \
             -o ./out/nixos-proxmox.qcow2 \
             --show-trace
+
+      - name: Compress QCOW2 (optionnel, pour upload plus rapide)
+        run: |
+          cd out
+          zstd -19 nixos-proxmox.qcow2 -o nixos-proxmox.qcow2.zst
 
       - name: Upload QCOW2 artifact
         uses: actions/upload-artifact@v4
         with:
           name: nixos-proxmox-qcow2
-          path: out/nixos-proxmox.qcow2
+          path: |
+            out/nixos-proxmox.qcow2
+            out/nixos-proxmox.qcow2.zst
+
+      - name: Generate checksum
+        run: |
+          cd out
+          sha256sum nixos-proxmox.qcow2 > nixos-proxmox.qcow2.sha256
+          sha256sum nixos-proxmox.qcow2.zst > nixos-proxmox.qcow2.zst.sha256
+
+      - name: Upload checksums
+        uses: actions/upload-artifact@v4
+        with:
+          name: checksums
+          path: out/*.sha256

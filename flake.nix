@@ -1,8 +1,10 @@
 {
-  description = "Configuration NixOS avec Home Manager";
+  description = "Configuration NixOS avec Home Manager + Proxmox QCOW2";
 
   nixConfig = {
-    extra-substituters = [ "https://jeremiealcaraz.cachix.org" ];
+    extra-substituters = [
+      "https://jeremiealcaraz.cachix.org"
+    ];
     extra-trusted-public-keys = [
       "jeremiealcaraz.cachix.org-1:9UgJGpTOkYGiRAhNrB+3qcmfJlW3WB9EjjeWZJkuvs="
     ];
@@ -11,16 +13,13 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     vicinae = {
       url = "github:vicinaehq/vicinae";
     };
-
     neovim = {
       url = "git+https://gitlab.com/jeremiealcaraz/nyanvim.git";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -41,11 +40,11 @@
     in
     rec {
       nixosConfigurations = {
+        # Configuration principale (desktop/workstation)
         nixos = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
             ./host/nixos/configuration.nix
-
             ({ pkgs, ... }: {
               programs.nix-ld = {
                 enable = true;
@@ -58,13 +57,43 @@
               };
               users.users.jeremie.linger = true;
             })
-
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = { inherit inputs; };
               home-manager.users.jeremie = import ./home-manager/home.nix;
+            }
+          ];
+        };
+
+        # Configuration Proxmox QCOW2 (VM cloud-ready)
+        proxmox = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./host/proxmox/configuration.nix
+            {
+              # Configuration spécifique pour VM Proxmox
+              virtualisation = {
+                diskSize = 10240;  # 10 GB
+                memorySize = 2048;  # 2 GB RAM (pour la build)
+              };
+
+              # Support QEMU Guest Agent
+              services.qemuGuest.enable = true;
+
+              # Cloud-init pour Proxmox
+              services.cloud-init = {
+                enable = true;
+                network.enable = true;
+              };
+
+              # Désactive les trucs desktop inutiles en VM
+              hardware.pulseaudio.enable = false;
+              services.xserver.enable = false;
+              
+              # Pas de Home Manager en VM serveur
+              home-manager.users = { };
             }
           ];
         };
