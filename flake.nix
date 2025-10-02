@@ -72,11 +72,11 @@
           system = "x86_64-linux";
           modules = [
             ./host/proxmox/configuration.nix
+            home-manager.nixosModules.home-manager
             {
               # Configuration spécifique pour VM Proxmox
               virtualisation = {
-                diskSize = 10240;  # 10 GB
-                memorySize = 2048;  # 2 GB RAM (pour la build)
+                diskSize = 10240; # 10 GB
               };
 
               # Support QEMU Guest Agent
@@ -91,9 +91,13 @@
               # Désactive les trucs desktop inutiles en VM
               hardware.pulseaudio.enable = false;
               services.xserver.enable = false;
-              
-              # Pas de Home Manager en VM serveur
-              home-manager.users = { };
+
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                extraSpecialArgs = { inherit inputs; };
+                users.jeremie = import ./home-manager/home.nix;
+              };
             }
           ];
         };

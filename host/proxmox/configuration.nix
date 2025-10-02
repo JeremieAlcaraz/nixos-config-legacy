@@ -9,24 +9,24 @@
   boot = {
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
-    
+
     # Kernel params optimisés pour VM
-    kernelParams = [ 
+    kernelParams = [
       "console=tty0"
-      "console=ttyS0,115200"  # Serial console pour Proxmox
+      "console=ttyS0,115200" # Serial console pour Proxmox
       "quiet"
     ];
-    
+
     # Modules kernel nécessaires pour Proxmox
-    initrd.availableKernelModules = [ 
-      "virtio_pci" 
-      "virtio_scsi" 
-      "virtio_blk" 
+    initrd.availableKernelModules = [
+      "virtio_pci"
+      "virtio_scsi"
+      "virtio_blk"
       "virtio_net"
       "9p"
       "9pnet_virtio"
     ];
-    
+
     kernelModules = [ "kvm-intel" "kvm-amd" ];
   };
 
@@ -34,7 +34,7 @@
   fileSystems."/" = {
     device = "/dev/disk/by-label/nixos";
     fsType = "ext4";
-    autoResize = true;  # Auto-resize si disque agrandi
+    autoResize = true; # Auto-resize si disque agrandi
   };
 
   fileSystems."/boot" = {
@@ -49,12 +49,12 @@
   networking = {
     hostName = "nixos-proxmox";
     useDHCP = lib.mkDefault true;
-    networkmanager.enable = false;  # Utilise systemd-networkd à la place
+    networkmanager.enable = false; # Utilise systemd-networkd à la place
     useNetworkd = true;
-    
+
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 22 ];  # SSH
+      allowedTCPPorts = [ 22 ]; # SSH
     };
   };
 
@@ -89,7 +89,7 @@
   users.users.root = {
     # Mot de passe par défaut (à changer!)
     # Généré avec: mkpasswd -m sha-512
-    hashedPassword = "$6$rounds=656000$YourHashHere";  # Change-moi!
+    hashedPassword = "$6$rounds=656000$YourHashHere"; # Change-moi!
     openssh.authorizedKeys.keys = [
       # Ajoute ta clé SSH publique ici
       # "ssh-ed25519 AAAAC3Nza... ton@email.com"
@@ -100,7 +100,7 @@
     isNormalUser = true;
     description = "jeremie";
     extraGroups = [ "wheel" ];
-    hashedPassword = "$6$rounds=656000$YourHashHere";  # Change-moi!
+    hashedPassword = "$6$rounds=656000$YourHashHere"; # Change-moi!
     openssh.authorizedKeys.keys = [
       # Ajoute ta clé SSH publique ici
     ];
@@ -126,14 +126,14 @@
   services.openssh = {
     enable = true;
     settings = {
-      PermitRootLogin = "prohibit-password";  # Clés SSH uniquement
+      PermitRootLogin = "prohibit-password"; # Clés SSH uniquement
       PasswordAuthentication = false;
     };
   };
 
   # ╭────────────────────── PACKAGES SYSTÈME ───────────────╮
   nixpkgs.config.allowUnfree = true;
-  
+
   environment.systemPackages = with pkgs; [
     # Outils de base
     vim
@@ -142,11 +142,11 @@
     curl
     htop
     tmux
-    
+
     # Outils réseau
     nettools
     inetutils
-    
+
     # Monitoring
     lm_sensors
   ];
@@ -155,9 +155,9 @@
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
     auto-optimise-store = true;
-    
+
     # Utilise ton cache Cachix
-    extra-substituters = [ 
+    extra-substituters = [
       "https://jeremiealcaraz.cachix.org"
       "https://vicinae.cachix.org"
     ];
@@ -178,7 +178,7 @@
   # Désactive les services inutiles en VM
   services.udisks2.enable = false;
   programs.dconf.enable = false;
-  
+
   # Console série pour Proxmox
   systemd.services."serial-getty@ttyS0" = {
     enable = true;
