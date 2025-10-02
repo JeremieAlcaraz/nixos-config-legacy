@@ -1,6 +1,14 @@
 {
   description = "Configuration NixOS avec Home Manager";
 
+  nixConfig = {
+    extra-substituters = [ "https://jeremiealcaraz.cachix.org" ];
+    extra-trusted-public-keys = [
+      "jeremiealcaraz.cachix.org-1:9UgJGpTOkYGiRAhNrB+3qcmfJlW3WB9EjjeWZJkuvs="
+    ];
+    experimental-features = [ "nix-command" "flakes" ];
+  };
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
@@ -9,28 +17,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # VS Code Server natif pour NixOS (Désactivé au profit de nix-ld)
-    # vscode-server = {
-    #   url = "github:nix-community/nixos-vscode-server";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
-
     vicinae = {
       url = "github:vicinaehq/vicinae";
     };
+
     neovim = {
       url = "git+https://gitlab.com/jeremiealcaraz/nyanvim.git";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs =
-    { self
-    , nixpkgs
-    , home-manager
-    , vicinae
-    , ...
-    } @ inputs:
+  outputs = { self, nixpkgs, home-manager, vicinae, ... } @ inputs:
     let
       mkFormatter = system:
         let
@@ -49,7 +46,6 @@
           modules = [
             ./host/nixos/configuration.nix
 
-            # Ajout de la compatibilité pour les binaires externes comme VS Code Server
             ({ pkgs, ... }: {
               programs.nix-ld = {
                 enable = true;
@@ -60,21 +56,14 @@
                   openssl
                 ];
               };
-
-              # On garde le lingering, c'est une bonne pratique pour les services utilisateur
               users.users.jeremie.linger = true;
             })
 
-            # module Home-Manager
             home-manager.nixosModules.home-manager
-
-            # glue pour charger la config user
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              # Ajoutez cette ligne pour passer inputs
               home-manager.extraSpecialArgs = { inherit inputs; };
-
               home-manager.users.jeremie = import ./home-manager/home.nix;
             }
           ];
