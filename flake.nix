@@ -8,6 +8,12 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # VS Code Server natif pour NixOS
+    vscode-server = {
+      url = "github:nix-community/nixos-vscode-server";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     vicinae = {
       url = "github:vicinaehq/vicinae";
     };
@@ -37,6 +43,14 @@
           system = "x86_64-linux";
           modules = [
             ./host/nixos/configuration.nix
+
+            # Module VS Code Server (recommandé)
+            inputs.vscode-server.nixosModules.default
+            ({ ... }: {
+              services.vscode-server.enable = true;
+              # (Optionnel) compat binaire générique via nix-ld :
+              # programs.nix-ld.enable = true;
+            })
 
             # module Home-Manager
             home-manager.nixosModules.home-manager
